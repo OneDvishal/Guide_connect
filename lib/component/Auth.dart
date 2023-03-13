@@ -1,123 +1,187 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:matcher/matcher.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:ui';
 
-class AuthForm extends StatefulWidget {
-  final void Function(String email,String username,String password,bool islogin) submitfm;
-   AuthForm(this.submitfm,);
+class SignupForm extends StatefulWidget {
 
+  final void Function(String email,String password,bool islogin) submitfm;
+  SignupForm(this.submitfm);
   @override
-  State<AuthForm> createState() => _AuthFormState();
+  State<SignupForm> createState() => SignupFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class SignupFormState extends State<SignupForm> {
+
   final _formkey = GlobalKey<FormState>();
-  var _email = "";
-  var _username = "";
-  var _password = "";
-  bool _islogin = true;
-  void Log(){
+  late final String userEmail;
+  late final String userPass;
+  void trysubmit(){
     FocusScope.of(context).unfocus();
-
     final isvalid = _formkey.currentState?.validate();
-    if(isvalid as bool){
+    if(isvalid != null){
       _formkey.currentState?.save();
-      widget.submitfm(_email,_username,_password,_islogin);
     }
-
+    widget.submitfm(userEmail,userPass,false);
   }
-
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Card(
-        margin: EdgeInsets.all(18),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Center(
-            child: SingleChildScrollView(
-              
-              child: Form(
-                key: _formkey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    key: ValueKey('email'),
-                    validator: (value) {
-                      if (value == null || !value.contains('@')) {
-                        return "enter valid email id";
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text(
-                        "email",
-                        style: TextStyle(fontSize: 18),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Container(
+            width: 300,
+            height: 400,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 0),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Form(
+                      
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "SIGNUP NOW!",
+                            style: GoogleFonts.poppins(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 60),
+                          TextFormField(
+                            validator: (value) {
+                              if(value==null || !value.contains('@')||!value.contains('.')){
+                                return "please enter valid email";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Enter your email',
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.white,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.1),
+                                  width: 0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.3),
+                                  width: 2,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.1),
+                                  width: 0,
+                                ),
+                              ),
+                            ),
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                            ),
+                            onSaved: (newValue) => userEmail=newValue as String,
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            validator: (value) {
+                              if(value==null || value.length<8){
+                                return "please enter password with more than 8 characters";
+                              }
+                              return null;
+                            },
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Enter your password',
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.white,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.1),
+                                  width: 0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.3),
+                                  width: 2,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.1),
+                                  width: 0,
+                                ),
+                              ),
+                            ),
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                            ),
+                            onSaved: (newValue) => userPass=newValue as String,
+                          ),
+                          const SizedBox(height: 45),
+                          ElevatedButton(
+                            onPressed: trysubmit,
+                            child: const Text('Sign up', 
+                              style: TextStyle(color: Color(0xff6607FF)),
+                              ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    onSaved: (Value) => _email = Value as String,
                   ),
-
-                  if(!_islogin)
-                  TextFormField(
-                    key: ValueKey('username'),
-                    validator: (value) {
-                      if (value == null || value.length < 7) {
-                        return "enter valid username";
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text(
-                        "username",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    onSaved: (Value) => _username = Value as String,
-                  ),
-                  TextFormField(
-                    key: ValueKey('password'),
-                    validator: (value) {
-                      if (value == null || !value.contains('@')) {
-                        return "enter valid password";
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text(
-                        "password",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    onSaved: (Value) => _password = Value as String,
-                  ),
-                  ElevatedButton(
-                    onPressed: Log,
-                    child: Text(
-                      _islogin ? "Login" : "Signup",
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _islogin = !_islogin;
-                      });
-                    },
-                    child: Text(
-                      _islogin ? "I don't have account" : "I have account",
-                      style: const TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                ],
-              )),
+                ),
+              ),
             ),
           ),
         ),
