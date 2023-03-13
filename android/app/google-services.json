@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "503249087116",
+    "project_id": "guide-connect-1adea",
+    "storage_bucket": "guide-connect-1adea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503249087116:android:158406da97e9e5ac3fa9a9",
+        "android_client_info": {
+          "package_name": "com.example.guide_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503249087116-8ec9c3t82o6bc92kf6e7m64v25mkjkfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ6eSfeDHZrInIBRXewdYA2iM-eUPvkwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "503249087116-8ec9c3t82o6bc92kf6e7m64v25mkjkfc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "503249087116-7ofe6ckjdrb02b9kf671vcr143teoqk6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.guideConnect"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503249087116:android:425ba15fb2707f503fa9a9",
+        "android_client_info": {
+          "package_name": "com.example.guideconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503249087116-8ec9c3t82o6bc92kf6e7m64v25mkjkfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ6eSfeDHZrInIBRXewdYA2iM-eUPvkwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "503249087116-8ec9c3t82o6bc92kf6e7m64v25mkjkfc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "503249087116-7ofe6ckjdrb02b9kf671vcr143teoqk6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.guideConnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
