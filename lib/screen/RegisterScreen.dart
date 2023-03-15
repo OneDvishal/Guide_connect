@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _auth = FirebaseAuth.instance;
 
   void _submit(
-      String email, String username, String password, bool islogin) async {
+      String email, String password, bool islogin) async {
     UserCredential future;
     try {
       if (!islogin) {
@@ -25,10 +25,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } else {
         future = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        await FirebaseFirestore.instance.collection('User').doc(future.user?.uid).set({
-          'emailId': email,
-          'UserId': username,
-        });
+        // await FirebaseFirestore.instance.collection('User').doc(future.user?.uid).set({
+        //   'emailId': email,
+        //   'UserId': username,
+        // });
       }
     } on PlatformException catch (err) {
       String Massage = "please check credential";
@@ -49,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthForm(_submit),
+      body: SignupForm(_submit),
     );
   }
 }
