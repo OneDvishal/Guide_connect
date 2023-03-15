@@ -5,33 +5,32 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 
 class SignupForm extends StatefulWidget {
-
-  final void Function(String email,String password,bool islogin) submitfm;
+  final void Function(String email, String password, bool islogin) submitfm;
   SignupForm(this.submitfm);
   @override
   State<SignupForm> createState() => SignupFormState();
 }
 
 class SignupFormState extends State<SignupForm> {
-
   final _formkey = GlobalKey<FormState>();
   late final String userEmail;
   late final String userPass;
-  void trysubmit(){
+  void trysubmit() {
     FocusScope.of(context).unfocus();
     final isvalid = _formkey.currentState?.validate();
-    if(isvalid != null){
+    if (isvalid != null) {
       _formkey.currentState?.save();
     }
-    widget.submitfm(userEmail,userPass,false);
+    widget.submitfm(userEmail, userPass, false);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background.png"),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -65,7 +64,6 @@ class SignupFormState extends State<SignupForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Form(
-                      
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -77,18 +75,24 @@ class SignupFormState extends State<SignupForm> {
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 60),
+                          const SizedBox(height: 30),
                           TextFormField(
                             validator: (value) {
-                              if(value==null || !value.contains('@')||!value.contains('.')){
+                              if (value == null ||
+                                  !value.contains('@') ||
+                                  !value.contains('.')) {
                                 return "please enter valid email";
                               }
                               return null;
                             },
                             decoration: InputDecoration(
+                              labelText: 'Email',
                               hintText: 'Enter your email',
                               hintStyle: GoogleFonts.poppins(
                                 color: Colors.white,
+                              ),
+                              labelStyle: GoogleFonts.poppins(
+                                color: Colors.white.withOpacity(0.5),
                               ),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
@@ -117,12 +121,13 @@ class SignupFormState extends State<SignupForm> {
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                             ),
-                            onSaved: (newValue) => userEmail=newValue as String,
+                            onSaved: (newValue) =>
+                                userEmail = newValue as String,
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
                             validator: (value) {
-                              if(value==null || value.length<8){
+                              if (value == null || value.length < 8) {
                                 return "please enter password with more than 8 characters";
                               }
                               return null;
@@ -130,8 +135,12 @@ class SignupFormState extends State<SignupForm> {
                             obscureText: true,
                             decoration: InputDecoration(
                               hintText: 'Enter your password',
+                              labelText: 'Password',
                               hintStyle: GoogleFonts.poppins(
                                 color: Colors.white,
+                              ),
+                              labelStyle: GoogleFonts.poppins(
+                                color: Colors.white.withOpacity(0.5),
                               ),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
@@ -160,19 +169,38 @@ class SignupFormState extends State<SignupForm> {
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                             ),
-                            onSaved: (newValue) => userPass=newValue as String,
+                            onSaved: (newValue) =>
+                                userPass = newValue as String,
                           ),
-                          const SizedBox(height: 45),
-                          ElevatedButton(
-                            onPressed: trysubmit,
-                            child: const Text('Sign up', 
-                              style: TextStyle(color: Color(0xff6607FF)),
+                          const SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+                              child: Center(
+                                child: Text(
+                                  "Sign Up",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 8, 4, 113),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Already have an account? Log in here",
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.white.withOpacity(0.8),
                               ),
                             ),
                           ),
