@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:guideconnect/component/timetable.dart';
 import 'screen/RegisterScreen.dart';
 
 void main() async{
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // routes,
-      home: RegisterScreen(),
+      home: TimeTableScreen(),
     );
   }
 }
