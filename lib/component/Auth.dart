@@ -13,15 +13,16 @@ class SignupForm extends StatefulWidget {
 
 class SignupFormState extends State<SignupForm> {
   final _formkey = GlobalKey<FormState>();
-  late final String userEmail;
-  late final String userPass;
+  var userEmail="";
+  var userPass="";
+  bool islogin=true;
   void trysubmit() {
     FocusScope.of(context).unfocus();
     final isvalid = _formkey.currentState?.validate();
     if (isvalid != null) {
       _formkey.currentState?.save();
     }
-    widget.submitfm(userEmail, userPass, false);
+    widget.submitfm(userEmail, userPass, islogin);
   }
 
   @override
@@ -64,6 +65,7 @@ class SignupFormState extends State<SignupForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Form(
+                      key: _formkey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -121,8 +123,8 @@ class SignupFormState extends State<SignupForm> {
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                             ),
-                            onSaved: (newValue) =>
-                                userEmail = newValue as String,
+                            onSaved: (value) =>
+                                userEmail = value as String,
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
@@ -169,12 +171,12 @@ class SignupFormState extends State<SignupForm> {
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                             ),
-                            onSaved: (newValue) =>
-                                userPass = newValue as String,
+                            onSaved: (value) =>
+                                userPass = value as String,
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: trysubmit,
                             child: Container(
                               height: 45,
                               decoration: BoxDecoration(
@@ -183,7 +185,7 @@ class SignupFormState extends State<SignupForm> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Sign Up",
+                                  islogin?"login":"Sign Up",
                                   style: GoogleFonts.poppins(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -195,9 +197,13 @@ class SignupFormState extends State<SignupForm> {
                           ),
                           SizedBox(height: 5),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                islogin = !islogin;
+                              });
+                            },
                             child: Text(
-                              "Already have an account? Log in here",
+                              islogin?"don't have account? Sign Up":"Already have an account? Log in here",
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 color: Colors.white.withOpacity(0.8),
