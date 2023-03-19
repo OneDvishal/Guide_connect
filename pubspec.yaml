@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^4.0.3
   cloud_firestore: ^4.4.4
   firebase_auth: ^4.2.10
+  simple_animations: ^1.3.3
 
 dev_dependencies:
   flutter_test:
