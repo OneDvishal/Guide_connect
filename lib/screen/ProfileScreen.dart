@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guideconnect/component/InspectButton.dart';
 import 'package:guideconnect/component/timetable.dart';
 
 class Profile extends StatefulWidget {
@@ -44,6 +46,38 @@ class _ProfileState extends State<Profile> {
                 fontFamily: 'Poppins',
               ),
             ),
+            actions: [
+              DropdownButton(
+                // underline: ,
+                dropdownColor: Theme.of(context).hoverColor,
+                icon: const Icon(Icons.more_vert),
+                onChanged: (itemidentifier) {
+                  if (itemidentifier == 'Logout') {
+                    FirebaseAuth.instance.signOut();
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: 'Logout',
+                    child: Container(
+                      // color: Color.fromARGB(230, 3, 168, 244),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.exit_to_app),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           body: Padding(
             padding: EdgeInsets.all(16),
@@ -74,17 +108,15 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    const CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(
-                          'https://scontent-bom1-2.cdninstagram.com/v/t51.2885-19/327310256_1203631943903472_6312242240879693392_n.jpg?stp=dst-jpg_s320x320&_nc_ht=scontent-bom1-2.cdninstagram.com&_nc_cat=100&_nc_ohc=CqusY-QkWmkAX9MrUZH&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfCwEjbl2IIreQ2-ZZXG-e5KGtvg6IcYF60lFcI-YnWPXA&oe=6417710A&_nc_sid=8fd12b'),
+                    CircleAvatar(
+                      radius: 30,
+                      child: Image.network(
+                          'https://drive.google.com/file/d/1mPAkuooe8x8b-71mGGejs8BgHJZqhRt5/view?usp=share_link'),
                     ),
                   ],
                 ),
                 SizedBox(height: 16),
                 TimeTableScreen(),
-      
-      
               ],
             ),
           ),

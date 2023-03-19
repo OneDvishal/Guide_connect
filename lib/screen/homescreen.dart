@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:guideconnect/screen/login.dart';
 import 'package:guideconnect/screen/signup.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +22,11 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("Welcome", style: TextStyle(
+                  const Text("Welcome", style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30
                   ),),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Text("Guide Connect: It connects you with your guide.", 
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -32,7 +37,7 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/Illustration.png')
                   )
@@ -47,22 +52,22 @@ class HomePage extends StatelessWidget {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(
+                      side:const BorderSide(
                         color: Colors.black
                       ),
                       borderRadius: BorderRadius.circular(50)
                     ),
-                    child: Text("Login", style: TextStyle(
+                    child: const Text("Login", style: TextStyle(
                       fontWeight: FontWeight.w600, 
                       fontSize: 18
                     ),),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Container(
-                    padding: EdgeInsets.only(top: 3, left: 3),
+                    padding: const EdgeInsets.only(top: 3, left: 3),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      border: Border(
+                      border: const Border(
                         bottom: BorderSide(color: Colors.black),
                         top: BorderSide(color: Colors.black),
                         left: BorderSide(color: Colors.black),
@@ -80,7 +85,7 @@ class HomePage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)
                       ),
-                      child: Text("Sign up", style: TextStyle(
+                      child: const Text("Sign up", style: TextStyle(
                         fontWeight: FontWeight.w600, 
                         fontSize: 18
                       ),),

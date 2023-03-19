@@ -13,8 +13,14 @@ class TimeTableScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           final _timetable = snapshot.data?.docs;
+          var timetablelen;
+          timetablelen=0;
+          if(_timetable?.length != null){
+              timetablelen=_timetable?.length;
+          }
+          
           return ListView.separated(
-            itemCount: _timetable!.length,
+            itemCount: timetablelen ,
             separatorBuilder: (BuildContext context, int index) =>
                 SizedBox(height: 16),
             itemBuilder: (BuildContext context, int index) {
@@ -26,14 +32,14 @@ class TimeTableScreen extends StatelessWidget {
                 ),
                 child: ListTile(
                   title: Text(
-                    _timetable[index]['Time'],
+                    _timetable?[index]['Time'],
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
                     ),
                   ),
                   subtitle: Text(
-                    _timetable[index]['Lecture'],
+                    _timetable?[index]['Lecture'],
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontFamily: 'Poppins',
