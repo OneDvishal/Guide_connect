@@ -1,7 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:guideconnect/screen/login.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final _formkey=GlobalKey<FormState>();
+  String userEmail="";
+  String Passowrd="";
+  void trysubmit() async{
+    UserCredential future;
+    try{
+      future =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: Passowrd);
+    } on PlatformException catch(err){
+      String massage="please  check usercerdential";
+      if(err.message!=null){
+        massage=err.message as String;
+      }
+
+    }catch(err){
+      print(err);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +41,11 @@ class SignupPage extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.black,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -28,59 +58,172 @@ class SignupPage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("Sign up", style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold
-                  ),),
-                  SizedBox(height: 20,),
-                  Text("Create an account, It's free", style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey[700]
-                  ),),
+                  const Text(
+                    "Sign up",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Create an account, It's free",
+                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                  ),
                 ],
               ),
-              Column(
-                children: <Widget>[
-                  makeInput(label: "Email"),
-                  makeInput(label: "Password", obscureText: true),
-                  makeInput(label: "Confirm Password", obscureText: true),
-                ],
+              Form(
+                key: _formkey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:  <Widget>[
+                    const Text(
+                       "Email",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      obscureText: false,
+                      validator: (value) {
+                        if(value ==null ||!value.contains("@")||!value.contains(".")){
+                          return "enter valid email";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                      ),
+                      onSaved: (newValue) {
+                        userEmail=newValue as String;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+              
+                    const Text(
+                       "Password",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      validator: (value) {
+                        if(value ==null ||value.length<7){
+                          return "Passowrd must be 7 charcter long";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                      ),
+                      onSaved: (newValue) {
+                        Passowrd=newValue as String;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+              
+                    const Text(
+                       "Confirm Passeord",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      obscureText: false,
+                      validator: (value) {
+                        if(value == null ||value != Passowrd||value.length<7){
+                          return "Password dosn't match";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 3, left: 3),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border(
-                    bottom: BorderSide(color: Colors.black),
-                    top: BorderSide(color: Colors.black),
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  )
-                ),
+                    borderRadius: BorderRadius.circular(50),
+                    border: const Border(
+                      bottom: BorderSide(color: Colors.black),
+                      top: BorderSide(color: Colors.black),
+                      left: BorderSide(color: Colors.black),
+                      right: BorderSide(color: Colors.black),
+                    )),
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
-                  onPressed: () {},
+                  onPressed: () {
+                    final isvalid =_formkey.currentState?.validate();
+                    if(isvalid !=null){
+                      _formkey.currentState?.save();
+                    }
+                  },
                   color: Colors.greenAccent,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50)
+                      borderRadius: BorderRadius.circular(50)),
+                  child: const Text(
+                    "Sign up",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                   ),
-                  child: Text("Sign up", style: TextStyle(
-                    fontWeight: FontWeight.w600, 
-                    fontSize: 18
-                  ),),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Already have an account?"),
+                  const Text("Already have an account?"),
                   InkWell(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage())),
-                    child: Text(" Login", style: TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 18
-                    ),),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage())),
+                    child: const Text(
+                      " Login",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
                   ),
                 ],
               ),
@@ -95,25 +238,29 @@ class SignupPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(label, style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w400,
-          color: Colors.black87
-        ),),
-        SizedBox(height: 5,),
+        Text(
+          label,
+          style: const TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
+        ),
+        SizedBox(
+          height: 5,
+        ),
         TextField(
           obscureText: obscureText,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 188, 188, 188))
-            ),
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 188, 188, 188))),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 188, 188, 188))
-            ),
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 188, 188, 188))),
           ),
         ),
-        SizedBox(height: 30,),
+        const SizedBox(
+          height: 25,
+        ),
       ],
     );
   }
