@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guideconnect/component/InspectButton.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 
 class Profile extends StatefulWidget {
@@ -15,16 +17,13 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   // var _Inspectcolor=#ffffff;
-  var _Ison = "-1";
+  var _Ison = "Schedule";
+  // var _page=0;
 
   // get icon => null;
   void _clicked(var str) {
-    if (str == _Ison) {
-      str = "-1";
-    }
     setState(() {
       _Ison = str;
-      print(_Ison);
     });
   }
 
@@ -80,7 +79,7 @@ class _ProfileState extends State<Profile> {
             ],
           ),
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -95,7 +94,7 @@ class _ProfileState extends State<Profile> {
                           style: GoogleFonts.poppins(
                             fontSize: 25,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xff757084),
+                            color: const Color(0xff757084),
                           ),
                         ),
                         Text(
@@ -108,17 +107,35 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    CircleAvatar(
-                      radius: 30,
-                      child: Image.network(
-                          'https://drive.google.com/file/d/1mPAkuooe8x8b-71mGGejs8BgHJZqhRt5/view?usp=share_link'),
+                    const CircleAvatar(
+                      radius: 45,
+                      backgroundImage: NetworkImage(
+                          'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                TimeTableScreen(),
+                const SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InspectButton("Schedule", _clicked, _Ison),
+                      InspectButton("Event", _clicked, _Ison),
+                      InspectButton("Assingment", _clicked, _Ison),
+                      // InspectButton("Event", _clicked, _Ison),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (_Ison == "Schedule") TimeTableScreen(),
               ],
             ),
+          ),
+          bottomNavigationBar: Container(
+            height: 60,
+            child: nevBar(),
           ),
         ),
       ),
