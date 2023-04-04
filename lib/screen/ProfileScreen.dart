@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../component/Display.dart';
-import '../component/Hello_Name.dart';
-import '../component/InspectButton.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:guideconnect/component/InspectButton.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:guideconnect/component/nevBar.dart';
+import 'package:guideconnect/component/timetable.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -15,42 +17,128 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   // var _Inspectcolor=#ffffff;
-    var _Ison="-1";
-    
-      // get icon => null;
-  void _clicked(var  str){
-    if(str==_Ison){
-      str="-1";
-    }
+  var _Ison = "Schedule";
+  // var _page=0;
+
+  // get icon => null;
+  void _clicked(var str) {
     setState(() {
-      _Ison=str;
-      print(_Ison);
+      _Ison = str;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      home: Scaffold(
-        body: Column(children: [
-          const HelloName(),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child : Row(
+    return MaterialApp(
+      home: Padding(
+        padding: const EdgeInsets.only(top: 13.0),
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: const Text(
+              'Guide Connect',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            actions: [
+              DropdownButton(
+                // underline: ,
+                dropdownColor: Theme.of(context).hoverColor,
+                icon: const Icon(Icons.more_vert),
+                onChanged: (itemidentifier) {
+                  if (itemidentifier == 'Logout') {
+                    FirebaseAuth.instance.signOut();
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: 'Logout',
+                    child: Container(
+                      // color: Color.fromARGB(230, 3, 168, 244),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.exit_to_app),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hello,",
+                          style: GoogleFonts.poppins(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff757084),
+                          ),
+                        ),
+                        Text(
+                          "Vivek Sahu",
+                          style: GoogleFonts.poppins(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff39304E),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const CircleAvatar(
+                      radius: 45,
+                      backgroundImage: NetworkImage(
+                          'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: [
-                      InspectButton("Events", _clicked,_Ison),
-                      InspectButton("Schedule",_clicked,_Ison),
-                      InspectButton("Assignments",_clicked,_Ison),
-                      InspectButton("Events",_clicked,_Ison),
+                      InspectButton("Schedule", _clicked, _Ison),
+                      InspectButton("Event", _clicked, _Ison),
+                      InspectButton("Assingment", _clicked, _Ison),
+                      // InspectButton("Event", _clicked, _Ison),
                     ],
                   ),
-                  
-              ),
-          Display(_Ison),
-        ]),
-        bottomNavigationBar: NavigationBar(destinations: [
-           IconButton(onPressed: () {print("kyu dabaya re madar chod");}, icon: Icon(Icons.home)),
-        ]),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (_Ison == "Schedule") TimeTableScreen(),
+              ],
+            ),
+          ),
+          bottomNavigationBar: Container(
+            height: 60,
+            child: nevBar(),
+          ),
         ),
+      ),
     );
   }
 }
