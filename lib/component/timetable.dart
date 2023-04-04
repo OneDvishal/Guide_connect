@@ -8,7 +8,7 @@ class TimeTableScreen extends StatelessWidget {
     return Expanded(
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('schedule')
+            .collection('schedule').doc().collection('mondey')
             .orderBy('atcreate', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
@@ -24,6 +24,7 @@ class TimeTableScreen extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) =>
                 SizedBox(height: 16),
             itemBuilder: (BuildContext context, int index) {
+              print(_timetable?[index]['Time']);
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(

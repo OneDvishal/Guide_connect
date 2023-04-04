@@ -15,9 +15,12 @@ class _SignupPageState extends State<SignupPage> {
   String userEmail="";
   String Passowrd="";
   void trysubmit() async{
+    print(Passowrd);
+    print(userEmail);
     UserCredential future;
     try{
       future =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: Passowrd);
+      Navigator.pop(context);
     } on PlatformException catch(err){
       String massage="please  check usercerdential";
       if(err.message!=null){
@@ -198,9 +201,11 @@ class _SignupPageState extends State<SignupPage> {
                   height: 60,
                   onPressed: () {
                     final isvalid =_formkey.currentState?.validate();
-                    if(isvalid !=null){
+                    if(isvalid !=null) {
                       _formkey.currentState?.save();
                     }
+                    print("clicked");
+                    trysubmit();
                   },
                   color: Colors.greenAccent,
                   elevation: 0,
