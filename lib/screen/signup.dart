@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,10 +15,17 @@ class _SignupPageState extends State<SignupPage> {
   final _formkey=GlobalKey<FormState>();
   String userEmail="";
   String Passowrd="";
+  String username="";
   void trysubmit() async{
     UserCredential future;
     try{
       future =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: Passowrd);
+      await FirebaseFirestore.instance.collection('user').add({
+        'username': username,
+        'userEmail':userEmail,
+        'uid':future.user?.uid,
+      });
+       Navigator.pop(context);
     } on PlatformException catch(err){
       String massage="please  check usercerdential";
       if(err.message!=null){
@@ -111,7 +119,41 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(
                       height: 25,
                     ),
-              
+                    const Text(
+                       "username",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      obscureText: false,
+                      validator: (value) {
+                        if(value ==null ||value.length<7){
+                          return "enter valid username";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 188, 188, 188))),
+                      ),
+                      onSaved: (newValue) {
+                        username=newValue as String;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
                     const Text(
                        "Password",
                       style: TextStyle(

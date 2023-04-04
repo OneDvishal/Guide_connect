@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guideconnect/component/InspectButton.dart';
@@ -83,37 +85,49 @@ class _ProfileState extends State<Profile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Hello,",
-                          style: GoogleFonts.poppins(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xff757084),
+                StreamBuilder<Object>(
+                    stream: FirebaseFirestore.instance
+                        .collection('user')
+                        .doc(FirebaseAuth.instance.currentUser?.uid)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Hello,",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xff757084),
+                                ),
+                              ),
+                              Text(
+                                "Vivek Sahu",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff39304E),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          "Vivek Sahu",
-                          style: GoogleFonts.poppins(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff39304E),
+                          const CircleAvatar(
+                            radius: 45,
+                            backgroundImage: NetworkImage(
+                                'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
                           ),
-                        ),
-                      ],
-                    ),
-                    const CircleAvatar(
-                      radius: 45,
-                      backgroundImage: NetworkImage(
-                          'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
-                    ),
-                  ],
-                ),
+                        ],
+                      );
+                    }),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
