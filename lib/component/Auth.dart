@@ -1,12 +1,11 @@
-// ignore_for_file: sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 
 class SignupForm extends StatefulWidget {
   final void Function(String email, String password, bool islogin) submitfm;
-  SignupForm(this.submitfm);
+  // ignore: use_key_in_widget_constructors
+  const SignupForm(this.submitfm);
   @override
   State<SignupForm> createState() => SignupFormState();
 }
@@ -37,8 +36,8 @@ class SignupFormState extends State<SignupForm> {
         ),
         child: Center(
           child: Container(
-            width: 300,
-            height: 400,
+            width: 320,
+            height: 420,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -93,32 +92,6 @@ class SignupFormState extends State<SignupForm> {
                               hintStyle: GoogleFonts.poppins(
                                 color: Colors.white,
                               ),
-                              labelStyle: GoogleFonts.poppins(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.1),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.1),
-                                  width: 0,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.3),
-                                  width: 2,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.1),
-                                  width: 0,
-                                ),
-                              ),
                             ),
                             style: GoogleFonts.poppins(
                               color: Colors.white,
@@ -141,32 +114,7 @@ class SignupFormState extends State<SignupForm> {
                               hintStyle: GoogleFonts.poppins(
                                 color: Colors.white,
                               ),
-                              labelStyle: GoogleFonts.poppins(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.1),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.1),
-                                  width: 0,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.3),
-                                  width: 2,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.1),
-                                  width: 0,
-                                ),
-                              ),
+                              
                             ),
                             style: GoogleFonts.poppins(
                               color: Colors.white,
@@ -210,7 +158,8 @@ class SignupFormState extends State<SignupForm> {
                               ),
                             ),
                           ),
-                        ],
+                          ],),
+                        ),
                       ),
                     ),
                   ),
@@ -218,8 +167,6 @@ class SignupFormState extends State<SignupForm> {
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }
