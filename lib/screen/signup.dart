@@ -5,37 +5,39 @@ import 'package:flutter/services.dart';
 import 'package:guideconnect/screen/login.dart';
 
 class SignupPage extends StatefulWidget {
-
-
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final _formkey=GlobalKey<FormState>();
-  String userEmail="";
-  String Passowrd="";
-  String username="";
-  void trysubmit() async{
+  final _formkey = GlobalKey<FormState>();
+  String userEmail = "";
+  String Passowrd = "";
+  String username = "";
+  void trysubmit() async {
+    print(Passowrd);
+    print(userEmail);
     UserCredential future;
-    try{
-      future =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: Passowrd);
-      await FirebaseFirestore.instance.collection('user').add({
-        'username': username,
-        'userEmail':userEmail,
-        'uid':future.user?.uid,
-      });
-       Navigator.pop(context);
-    } on PlatformException catch(err){
-      String massage="please  check usercerdential";
-      if(err.message!=null){
-        massage=err.message as String;
-      }
+    try {
+      future = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: userEmail, password: Passowrd);
 
-    }catch(err){
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(future.user?.uid)
+          .set({'username': username, 'Email': userEmail});
+
+      Navigator.pop(context);
+    } on PlatformException catch (err) {
+      String massage = "please  check usercerdential";
+      if (err.message != null) {
+        massage = err.message as String;
+      }
+    } catch (err) {
       print(err);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,6 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
@@ -55,6 +56,7 @@ class _SignupPageState extends State<SignupPage> {
             color: Colors.black,
           ),
         ),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -83,9 +85,9 @@ class _SignupPageState extends State<SignupPage> {
                 key: _formkey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:  <Widget>[
+                  children: <Widget>[
                     const Text(
-                       "Email",
+                      "Email",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -97,7 +99,9 @@ class _SignupPageState extends State<SignupPage> {
                     TextFormField(
                       obscureText: false,
                       validator: (value) {
-                        if(value ==null ||!value.contains("@")||!value.contains(".")){
+                        if (value == null ||
+                            !value.contains("@") ||
+                            !value.contains(".")) {
                           return "enter valid email";
                         }
                         return null;
@@ -113,14 +117,14 @@ class _SignupPageState extends State<SignupPage> {
                                 color: Color.fromARGB(255, 188, 188, 188))),
                       ),
                       onSaved: (newValue) {
-                        userEmail=newValue as String;
+                        userEmail = newValue as String;
                       },
                     ),
                     const SizedBox(
                       height: 25,
                     ),
                     const Text(
-                       "username",
+                      "username",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -132,7 +136,7 @@ class _SignupPageState extends State<SignupPage> {
                     TextFormField(
                       obscureText: false,
                       validator: (value) {
-                        if(value ==null ||value.length<7){
+                        if (value == null || value.length < 7) {
                           return "enter valid username";
                         }
                         return null;
@@ -148,14 +152,14 @@ class _SignupPageState extends State<SignupPage> {
                                 color: Color.fromARGB(255, 188, 188, 188))),
                       ),
                       onSaved: (newValue) {
-                        username=newValue as String;
+                        username = newValue as String;
                       },
                     ),
                     const SizedBox(
                       height: 25,
                     ),
                     const Text(
-                       "Password",
+                      "Password",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -167,7 +171,7 @@ class _SignupPageState extends State<SignupPage> {
                     TextFormField(
                       obscureText: true,
                       validator: (value) {
-                        if(value ==null ||value.length<7){
+                        if (value == null || value.length < 7) {
                           return "Passowrd must be 7 charcter long";
                         }
                         return null;
@@ -183,15 +187,14 @@ class _SignupPageState extends State<SignupPage> {
                                 color: Color.fromARGB(255, 188, 188, 188))),
                       ),
                       onSaved: (newValue) {
-                        Passowrd=newValue as String;
+                        Passowrd = newValue as String;
                       },
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-              
                     const Text(
-                       "Confirm Passeord",
+                      "Confirm Passeord",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -203,8 +206,10 @@ class _SignupPageState extends State<SignupPage> {
                     TextFormField(
                       obscureText: false,
                       validator: (value) {
-                        if(value == null ||value != Passowrd||value.length<7){
-                          return "Password dosn't match";
+                        if (value == null || value.length < 7) {
+                          if (value != Passowrd) {
+                            return "Password dosn't match";
+                          }
                         }
                         return null;
                       },
@@ -239,10 +244,12 @@ class _SignupPageState extends State<SignupPage> {
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () {
-                    final isvalid =_formkey.currentState?.validate();
-                    if(isvalid !=null){
+                    final isvalid = _formkey.currentState?.validate();
+                    if (isvalid != null) {
                       _formkey.currentState?.save();
                     }
+                    print("clicked");
+                    trysubmit();
                   },
                   color: Colors.greenAccent,
                   elevation: 0,

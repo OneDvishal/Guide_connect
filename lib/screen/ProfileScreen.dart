@@ -29,6 +29,32 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  String username = '';
+  var profImg;
+  Future getData() async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) async {
+      final user = value;
+      if (value.exists) {
+        setState(() {
+          username = user['username'];
+        });
+        print("geting");
+      }
+    });
+    
+    print(username);
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -85,49 +111,37 @@ class _ProfileState extends State<Profile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                StreamBuilder<Object>(
-                    stream: FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(FirebaseAuth.instance.currentUser?.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Hello,",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xff757084),
-                                ),
-                              ),
-                              Text(
-                                "Vivek Sahu",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff39304E),
-                                ),
-                              ),
-                            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hello,",
+                          style: GoogleFonts.poppins(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff757084),
                           ),
-                          const CircleAvatar(
-                            radius: 45,
-                            backgroundImage: NetworkImage(
-                                'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                        ),
+                        Text(
+                          username != null ? username : "",
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff39304E),
                           ),
-                        ],
-                      );
-                    }),
+                        ),
+                      ],
+                    ),
+                    const CircleAvatar(
+                      radius: 45,
+                      backgroundImage: NetworkImage(
+                          'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
