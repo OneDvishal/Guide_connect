@@ -8,7 +8,7 @@ class TimeTableScreen extends StatelessWidget {
     return Expanded(
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('schedule').doc().collection('mondey')
+            .collection('schedule')
             .orderBy('atcreate', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
@@ -24,7 +24,7 @@ class TimeTableScreen extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) =>
                 SizedBox(height: 16),
             itemBuilder: (BuildContext context, int index) {
-              print(_timetable?[index]['Time']);
+              // print(_timetable?[index]['Time']);
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
@@ -33,14 +33,14 @@ class TimeTableScreen extends StatelessWidget {
                 ),
                 child: ListTile(
                   title: Text(
-                    _timetable?[index]['Time'],
+                    _timetable?[index]['monday']['Lecture'],
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
                     ),
                   ),
                   subtitle: Text(
-                    _timetable?[index]['Lecture'],
+                    _timetable?[index]['monday']['Time'],
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontFamily: 'Poppins',

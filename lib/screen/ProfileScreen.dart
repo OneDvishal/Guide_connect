@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guideconnect/component/InspectButton.dart';
@@ -25,6 +27,32 @@ class _ProfileState extends State<Profile> {
     setState(() {
       _Ison = str;
     });
+  }
+
+  String username = '';
+  var profImg;
+  Future getData() async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) async {
+      final user = value;
+      if (value.exists) {
+        setState(() {
+          username = user['username'];
+        });
+        print("geting");
+      }
+    });
+    
+    print(username);
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   @override
@@ -98,9 +126,9 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Text(
-                          "Vivek Sahu",
+                          username != null ? username : "",
                           style: GoogleFonts.poppins(
-                            fontSize: 25,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff39304E),
                           ),
