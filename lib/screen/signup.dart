@@ -194,7 +194,7 @@ class _SignupPageState extends State<SignupPage> {
                       height: 25,
                     ),
                     const Text(
-                      "Confirm Passeord",
+                      "Confirm Password",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:guideconnect/screen/ProfileScreen.dart';
 import 'package:guideconnect/screen/homescreen.dart';
-import 'screen/RegisterScreen.dart';
+import 'package:guideconnect/screen/username_photo.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           if(snapshot.hasData){
             return Profile();
           }
-          return HomePage();
+          return const ProfilePhoto();
         }),
     );
   }
