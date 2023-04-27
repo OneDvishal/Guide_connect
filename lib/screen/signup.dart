@@ -25,7 +25,7 @@ class _SignupPageState extends State<SignupPage> {
       await FirebaseFirestore.instance
           .collection('user')
           .doc(future.user?.uid)
-          .set({'username': username, 'Email': userEmail});
+          .set({'username': username, 'Email': userEmail, 'profileImageUrl':  ''});
 
       Navigator.pop(context);
     } on PlatformException catch (err) {
