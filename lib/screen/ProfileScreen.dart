@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          bottomNavigationBar: Container(
+          bottomNavigationBar: SizedBox(
             height: 60,
             child: nevBar(),
           ),
