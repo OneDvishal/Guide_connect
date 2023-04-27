@@ -7,6 +7,8 @@ import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/username_photo.dart';
 
+import '../component/update_schedule.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key? key});
 
@@ -26,8 +28,6 @@ class _ProfileState extends State<Profile> {
     super.initState();
     getUserEmail();
   }
-
-  
 
   Future<void> getData() async {
     final userDoc = FirebaseFirestore.instance
@@ -61,7 +61,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-
     bool showFloatingActionButton =
         FirebaseAuth.instance.currentUser?.email == 'test@123.com';
 
@@ -179,12 +178,40 @@ class _ProfileState extends State<Profile> {
       floatingActionButton: showFloatingActionButton
           ? FloatingActionButton(
               onPressed: () {
-                // Handle the onPressed event
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 150,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const UpdateSchedule(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.schedule),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              // Handle the event icon onPressed event
+                            },
+                            icon: const Icon(Icons.event),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               child: const Icon(Icons.add),
             )
           : null,
-    
       bottomNavigationBar: SizedBox(
         height: 60,
         child: nevBar(),
