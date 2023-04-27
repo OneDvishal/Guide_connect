@@ -30,11 +30,7 @@ class _nevBarState extends State<nevBar> {
                 size: 30,
                 color: _page==1? Colors.white:Colors.black,
               ),
-              Icon(
-                Icons.notifications_none,
-                size: 30,
-                color: _page==2? Colors.white:Colors.black,
-              ),
+
               Icon(
                 Icons.perm_identity,
                 size: 30,
