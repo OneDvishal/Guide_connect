@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guideconnect/component/InspectButton.dart';
+import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/username_photo.dart';
@@ -186,6 +187,17 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AddAdmin(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.person_2_outlined),
+                          ),
                           IconButton(
                             onPressed: () {
                               Navigator.push(
