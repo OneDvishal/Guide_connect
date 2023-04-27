@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TimeTableScreen extends StatelessWidget {
+  // String day =DateFormat.E().format(now);
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('schedule')
-            .orderBy('atcreate', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
           final _timetable = snapshot.data?.docs;
@@ -33,14 +33,14 @@ class TimeTableScreen extends StatelessWidget {
                 ),
                 child: ListTile(
                   title: Text(
-                    _timetable?[index]['monday']['Lecture'],
+                    "",
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
                     ),
                   ),
                   subtitle: Text(
-                    _timetable?[index]['monday']['Time'],
+                    "",
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontFamily: 'Poppins',
@@ -49,6 +49,9 @@ class TimeTableScreen extends StatelessWidget {
                   leading: CircleAvatar(
                     child: Text('${index + 1}'),
                   ),
+                  onTap: () {
+                    
+                  },
                 ),
               );
             },

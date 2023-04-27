@@ -10,6 +10,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/username_photo.dart';
+import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -31,8 +32,11 @@ class _ProfileState extends State<Profile> {
   }
 
   String username = '';
-  var profImg;
+  String profImg = '';
+  
   Future getData() async {
+
+    
     await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -44,11 +48,10 @@ class _ProfileState extends State<Profile> {
           username = user['username'];
           profImg = user['profileImageUrl'];
         });
-        print("geting");
+        // print("geting ${profImg}");
       }
     });
-
-    print(username);
+    // print(DocID);
   }
 
   @override
@@ -59,6 +62,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return MaterialApp(
       home: Padding(
         padding: const EdgeInsets.only(top: 13.0),
@@ -77,7 +81,7 @@ class _ProfileState extends State<Profile> {
             ),
             actions: [
               DropdownButton(
-                // underline: ,
+                elevation: 0,
                 dropdownColor: Theme.of(context).hoverColor,
                 icon: const Icon(Icons.more_vert),
                 onChanged: (itemidentifier) {
@@ -145,8 +149,10 @@ class _ProfileState extends State<Profile> {
                               builder: (context) => const ProfilePhoto())),
                       child: CircleAvatar(
                         radius: 45,
-                        backgroundImage: NetworkImage(profImg!=null?profImg: 
-                            'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                        foregroundImage:
+                            profImg != null ? NetworkImage(profImg) : null,
+                        backgroundImage:
+                            AssetImage('assets/images/profile_pic.png'),
                       ),
                     ),
                   ],
@@ -169,6 +175,10 @@ class _ProfileState extends State<Profile> {
                 if (_Ison == "Schedule") TimeTableScreen(),
               ],
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: const Icon(Icons.add),
           ),
           bottomNavigationBar: SizedBox(
             height: 60,
