@@ -60,7 +60,16 @@ class _AddAdminState extends State<AddAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Emails'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.black, // Change the color of the back arrow here
+        ),
+        title: const Text(
+          'Admin Emails',
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -71,14 +80,22 @@ class _AddAdminState extends State<AddAdmin> {
               controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
+                border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(
+                  const Size(double.infinity, 50), // Set the height to 50
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
               onPressed: _addAdminEmail,
               child: const Text('Add Email'),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 25.0),
             const Text(
               'Admin Emails',
               style: TextStyle(
@@ -86,34 +103,36 @@ class _AddAdminState extends State<AddAdmin> {
                 fontSize: 18.0,
               ),
             ),
-            SizedBox(height: 8.0),
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('admin_emails')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final emails = snapshot.data!.docs;
+            const SizedBox(height: 16.0),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('admin_emails')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final emails = snapshot.data!.docs;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: emails.map((doc) {
-                      final docId = doc.id;
-                      final email = doc['email'];
+                    return ListView.builder(
+                      itemCount: emails.length,
+                      itemBuilder: (context, index) {
+                        final docId = emails[index].id;
+                        final email = emails[index]['email'];
 
-                      return ListTile(
-                        title: Text(email),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _removeAdminEmail(docId),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                }
+                        return ListTile(
+                          title: Text(email),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.black,),
+                            onPressed: () => _removeAdminEmail(docId),
+                          ),
+                        );
+                      },
+                    );
+                  }
 
-                return const CircularProgressIndicator();
-              },
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
           ],
         ),
