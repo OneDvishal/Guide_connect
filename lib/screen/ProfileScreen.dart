@@ -143,9 +143,9 @@ class _ProfileState extends State<Profile> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const ProfilePhoto())),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 45,
-                        backgroundImage: NetworkImage(
+                        backgroundImage: NetworkImage(profImg!=null?profImg: 
                             'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
                       ),
                     ),
