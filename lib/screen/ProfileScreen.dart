@@ -42,11 +42,12 @@ class _ProfileState extends State<Profile> {
       if (value.exists) {
         setState(() {
           username = user['username'];
+          profImg = user['profileImageUrl'];
         });
         print("geting");
       }
     });
-    
+
     print(username);
   }
 
@@ -97,7 +98,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           Text(
                             'Logout',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
@@ -138,11 +139,13 @@ class _ProfileState extends State<Profile> {
                     ),
                     InkWell(
                       // onTap: Navigator.push(context, route),
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const ProfilePhoto())),
-                      child: const CircleAvatar(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfilePhoto())),
+                      child: CircleAvatar(
                         radius: 45,
-                        backgroundImage: NetworkImage(
+                        backgroundImage: NetworkImage(profImg!=null?profImg: 
                             'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
                       ),
                     ),
@@ -167,7 +170,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          bottomNavigationBar: Container(
+          bottomNavigationBar: SizedBox(
             height: 60,
             child: nevBar(),
           ),
