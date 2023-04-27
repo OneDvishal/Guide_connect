@@ -22,9 +22,9 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return Profile();
+            return const Profile();
           }
-          return const ProfilePhoto();
+          return HomePage();
         }),
     );
   }

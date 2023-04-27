@@ -9,6 +9,7 @@ import 'package:guideconnect/component/InspectButton.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
+import 'package:guideconnect/screen/username_photo.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -135,10 +136,15 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    const CircleAvatar(
-                      radius: 45,
-                      backgroundImage: NetworkImage(
-                          'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                    InkWell(
+                      // onTap: Navigator.push(context, route),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const ProfilePhoto())),
+                      child: const CircleAvatar(
+                        radius: 45,
+                        backgroundImage: NetworkImage(
+                            'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg'),
+                      ),
                     ),
                   ],
                 ),

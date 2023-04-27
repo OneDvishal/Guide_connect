@@ -292,7 +292,7 @@ class _SignupPageState extends State<SignupPage> {
           style: const TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         TextField(
