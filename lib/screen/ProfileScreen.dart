@@ -6,8 +6,8 @@ import 'package:guideconnect/component/InspectButton.dart';
 import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
-import 'package:guideconnect/screen/add_schedule_screen.dart';
 import 'package:guideconnect/screen/username_photo.dart';
+import 'package:guideconnect/screen/week_selection.dart';
 import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
@@ -213,7 +213,7 @@ class _ProfileState extends State<Profile> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => createschedule(),
+                                    builder: (context) => WeekdaySelectionScreen(),
                                   ));
                             },
                             icon: const Icon(Icons.event),
