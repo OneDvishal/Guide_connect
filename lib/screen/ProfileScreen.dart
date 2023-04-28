@@ -8,8 +8,9 @@ import 'package:guideconnect/component/InspectButton.dart';
 import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
-import 'package:guideconnect/screen/add_schedule_screen.dart';
 import 'package:guideconnect/screen/username_photo.dart';
+import 'package:guideconnect/screen/week_selection.dart';
+import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key});
@@ -93,35 +94,6 @@ class _ProfileState extends State<Profile> {
               fontFamily: 'Poppins',
             ),
           ),
-          actions: [
-            DropdownButton(
-              dropdownColor: Theme.of(context).hoverColor,
-              icon: const Icon(Icons.more_vert),
-              onChanged: (itemidentifier) {
-                if (itemidentifier == 'Logout') {
-                  FirebaseAuth.instance.signOut();
-                }
-              },
-              items: [
-                DropdownMenuItem(
-                    value: 'Logout',
-                    child: Container(
-                      child: Row(
-                        children: const [
-                          Icon(Icons.exit_to_app),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ))
-              ],
-            ),
-          ],
         ),
       ),
       body: Container(
@@ -215,7 +187,7 @@ class _ProfileState extends State<Profile> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => createschedule(),
+                                    builder: (context) => WeekdaySelectionScreen(),
                                   ));
                             },
                             icon: const Icon(Icons.event),
