@@ -5,26 +5,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../screen/edit_schedule_screen.dart';
 
 class TimeTableScreen extends StatelessWidget {
-  Future<bool> isAdminUser(String userEmail) async {
-    try {
-      // Query the "admin_users" collection in Firestore
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('admin_users')
-          .where('email', isEqualTo: userEmail)
-          .get();
 
-      if (userEmail == 'test@123.com') {
-        return true;
-      }
-
-      // Return true if the email exists in the collection
-      return querySnapshot.docs.isNotEmpty;
-    } catch (error) {
-      // Handle any errors that occur during the query
-      print('Error checking admin user: $error');
-      return false;
+Future<bool> isAdminUser(String userEmail) async {
+  try {
+    if (userEmail == 'test@123.com') {
+      return true;
     }
+
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('admin_emails')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    // Return true if the email exists in the collection
+    return querySnapshot.docs.isNotEmpty;
+  } catch (error) {
+    // Handle any errors that occur during the query
+    print('Error checking admin user: $error');
+    return false;
   }
+}
+
 
 // Implement onTap based on user's admin status
   void handleOnTap(BuildContext context) async {
