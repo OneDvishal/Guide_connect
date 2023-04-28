@@ -77,6 +77,12 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     });
   }
 
+  void _deleteSchedule(int index) {
+    setState(() {
+      lectures.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +133,13 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                     ),
                     controller: TextEditingController(text: lectureTime),
                   ),
+                  trailing: IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () => _deleteSchedule(index),
+                  ),
                 );
               },
             ),
@@ -144,7 +157,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
                     controller: newLectureTimeController,
@@ -167,4 +180,3 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     );
   }
 }
-
