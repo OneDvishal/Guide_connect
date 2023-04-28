@@ -1,53 +1,207 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../screen/edit_schedule_screen.dart';
 
 class TimeTableScreen extends StatelessWidget {
+
+Future<bool> isAdminUser(String userEmail) async {
+  try {
+    if (userEmail == 'test@123.com') {
+      return true;
+    }
+
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('admin_emails')
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    // Return true if the email exists in the collection
+    return querySnapshot.docs.isNotEmpty;
+  } catch (error) {
+    // Handle any errors that occur during the query
+    print('Error checking admin user: $error');
+    return false;
+  }
+}
+
+
+// Implement onTap based on user's admin status
+  void handleOnTap(BuildContext context) async {
+    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    // Check if the user is an admin
+    bool isAdmin = await isAdminUser(userEmail!);
+
+    if (isAdmin) {
+      // Navigate to EditScheduleScreen if the user is an admin
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditScheduleScreen(
+            scheduleId: _getDayOfWeek(DateTime.now().weekday),
+          ),
+        ),
+      );
+    }
+  }
+  // void createLectures() async {
+  //   // Create a Firestore instance
+  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //   // Define the lectures for each day
+  //   final mondayLectures = [
+  //     {
+  //       "lecture": "English",
+  //       "time": "10:00 AM",
+  //     },
+  //     {
+  //       "lecture": "Math",
+  //       "time": "11:00 AM",
+  //     },
+  //     // Add more lectures for Monday if needed
+  //   ];
+
+  //   final tuesdayLectures = [
+  //     {
+  //       "lecture": "Science",
+  //       "time": "9:00 AM",
+  //     },
+  //     // Add more lectures for Tuesday if needed
+  //   ];
+
+  // final saturdayLectures = [
+  //   {
+  //     "lecture": null,
+  //     "time": null,
+  //   },
+  //   // Add more lectures for Wednesday if needed
+  // ];
+
+  //   final thursdayLectures = [
+  //     {
+  //       "lecture": "OS",
+  //       "time": "2:00 PM",
+  //     },
+  //     // Add more lectures for Thursday if needed
+  //   ];
+
+  //   // Create the lectures subcollection for each day
+  //   await firestore
+  //       .collection('schedule')
+  //       .doc('monday')
+  //       .set({'lectures': mondayLectures});
+
+  //   await firestore
+  //       .collection('schedule')
+  //       .doc('tuesday')
+  //       .set({'lectures': tuesdayLectures});
+
+  //   await firestore
+  //       .collection('schedule')
+  //       .doc('wednesday')
+  //       .set({'lectures': wednesdayLectures});
+
+  // await firestore
+  //     .collection('schedule')
+  //     .doc('saturday')
+  //     .set({'lectures': saturdayLectures});
+
+  //   print('Lectures created successfully!');
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // Call the createLectures function to create the lectures in Firestore
+    // createLectures();
+
     return Expanded(
-      child: StreamBuilder(
+      child: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('schedule')
-            .orderBy('atcreate', descending: false)
+            .doc(_getDayOfWeek(DateTime.now().weekday))
             .snapshots(),
         builder: (context, snapshot) {
-          final _timetable = snapshot.data?.docs;
-          var timetablelen;
-          timetablelen=0;
-          if(_timetable?.length != null){
-              timetablelen=_timetable?.length;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading indicator while waiting for data
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-          
+
+          if (snapshot.hasError) {
+            // Handle any errors that occurred while fetching the data
+            return const Center(
+              child: Text('Error occurred'),
+            );
+          }
+
+          final timetableData = snapshot.data?.data();
+          if (timetableData == null || timetableData is! Map<String, dynamic>) {
+            // Handle the case when the data is null or not in the expected format
+            return const Center(
+              child: Text('No lectures available for today'),
+            );
+          }
+
+          final lectures = timetableData['lectures'] as List<dynamic>;
+          // if (lectures == null || lectures.isEmpty) {
+          //   // Handle the case when there are no lectures for the current day
+          //   return const Center(
+          //     child: Text('No lectures available for today'),
+          //   );
+          // }
+
           return ListView.separated(
-            itemCount: timetablelen ,
+            itemCount: lectures.length,
             separatorBuilder: (BuildContext context, int index) =>
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
             itemBuilder: (BuildContext context, int index) {
-              // print(_timetable?[index]['Time']);
+              final lecture = lectures[index]['lecture'] as String?;
+              final time = lectures[index]['time'] as String?;
+
+              if (lecture == null || time == null) {
+                // Handle the case when lecture or time is null
+                return const SizedBox.shrink(); // or any other fallback UI
+              }
+
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
+                  onTap: () {
+                    handleOnTap(context);
+                  },
                   title: Text(
-                    _timetable?[index]['monday']['Lecture'],
+                    lecture,
                     style: const TextStyle(
                       color: Colors.white,
+                      letterSpacing: 1.3,
+                      fontWeight: FontWeight.bold,
                       fontFamily: 'Poppins',
                     ),
                   ),
                   subtitle: Text(
-                    _timetable?[index]['monday']['Time'],
+                    time,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontFamily: 'Poppins',
                     ),
                   ),
                   leading: CircleAvatar(
-                    child: Text('${index + 1}'),
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -56,5 +210,25 @@ class TimeTableScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _getDayOfWeek(int day) {
+    switch (day) {
+      case DateTime.monday:
+        return 'monday';
+      case DateTime.tuesday:
+        return 'tuesday';
+      case DateTime.wednesday:
+        return 'wednesday';
+      case DateTime.thursday:
+        return 'thursday';
+      case DateTime.friday:
+        return 'friday';
+      case DateTime.saturday:
+        return 'saturday';
+      case DateTime.sunday:
+        return 'sunday';
+    }
+    throw Exception('Invalid day of week');
   }
 }

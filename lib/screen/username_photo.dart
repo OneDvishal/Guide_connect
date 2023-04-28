@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -66,10 +69,12 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black,
-        ),
+        )),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
