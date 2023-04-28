@@ -59,6 +59,7 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +168,7 @@ class _ProfileState extends State<Profile> {
                 children: [
                   InspectButton("Schedule", _clicked, _Ison),
                   InspectButton("Event", _clicked, _Ison),
-                  InspectButton("Assingment", _clicked, _Ison),
+                  InspectButton("Notifications", _clicked, _Ison),
                 ],
               ),
             ),
@@ -178,6 +179,8 @@ class _ProfileState extends State<Profile> {
       ),
       floatingActionButton: showFloatingActionButton
           ? FloatingActionButton(
+              // focusColor: Colors.black,
+              backgroundColor: Colors.black,
               onPressed: () {
                 showModalBottomSheet<void>(
                   context: context,

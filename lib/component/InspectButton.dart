@@ -23,9 +23,9 @@ class InspectButton extends StatelessWidget {
             height: double.infinity,
             decoration: BoxDecoration(
               color: Ison == InspectName
-                  ? Colors.deepPurpleAccent
-                  : const Color.fromARGB(255, 255, 255, 255),
-              borderRadius: BorderRadius.circular(13),
+                  ? Colors.black
+                  : Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
               child: TextButton(
@@ -37,10 +37,10 @@ class InspectButton extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     letterSpacing: 0.6,
                     color: Ison == InspectName
-                        ? const Color(0xffFEFEFE)
+                        ? Theme.of(context).scaffoldBackgroundColor
                         : const Color(0xff39304E),
                     textStyle: const TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 21),
+                        fontWeight: FontWeight.w800, fontSize: 18),
                   ),
                 ),
               ),
