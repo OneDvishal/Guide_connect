@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:guideconnect/component/nevBar.dart';
 
 
 
@@ -12,13 +13,13 @@ class UpdateProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.black,
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
         
         title: Text(
           "Guide Connect",
-          style: Theme.of(context).textTheme.headline4,
         ),
       ),
       body: SingleChildScrollView(
@@ -66,7 +67,7 @@ class UpdateProfileScreen extends StatelessWidget {
                   TextFormField(
                     decoration: const InputDecoration(
                       label: Text("Username"),
-                      prefixIcon: Icon(Icons.percent_outlined),
+                      prefixIcon: Icon(Icons.person_2_outlined),
                     ),
                   ),
                   const SizedBox(
@@ -78,9 +79,7 @@ class UpdateProfileScreen extends StatelessWidget {
                       prefixIcon: Icon(Icons.email),
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                 
                   
                   const SizedBox(
                     height: 30,
@@ -133,6 +132,7 @@ class UpdateProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+      // bottomNavigationBar: nevBar(),
     );
   }
 }

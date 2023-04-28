@@ -123,7 +123,7 @@ class WeekdaySelectionScreen extends StatelessWidget {
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.grey[300]!),
                   padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
