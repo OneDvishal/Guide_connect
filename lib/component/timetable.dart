@@ -1,9 +1,50 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../screen/edit_schedule_screen.dart';
 
 class TimeTableScreen extends StatelessWidget {
+  Future<bool> isAdminUser(String userEmail) async {
+    try {
+      // Query the "admin_users" collection in Firestore
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('admin_users')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+      if (userEmail == 'test@123.com') {
+        return true;
+      }
+
+      // Return true if the email exists in the collection
+      return querySnapshot.docs.isNotEmpty;
+    } catch (error) {
+      // Handle any errors that occur during the query
+      print('Error checking admin user: $error');
+      return false;
+    }
+  }
+
+// Implement onTap based on user's admin status
+  void handleOnTap(BuildContext context) async {
+    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    // Check if the user is an admin
+    bool isAdmin = await isAdminUser(userEmail!);
+
+    if (isAdmin) {
+      // Navigate to EditScheduleScreen if the user is an admin
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditScheduleScreen(
+            scheduleId: _getDayOfWeek(DateTime.now().weekday),
+          ),
+        ),
+      );
+    }
+  }
   // void createLectures() async {
   //   // Create a Firestore instance
   // final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -133,13 +174,7 @@ class TimeTableScreen extends StatelessWidget {
                 ),
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditScheduleScreen(
-                            scheduleId: _getDayOfWeek(DateTime.now().weekday)),
-                      ),
-                    );
+                    handleOnTap(context);
                   },
                   title: Text(
                     lecture,

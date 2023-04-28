@@ -8,8 +8,6 @@ import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/username_photo.dart';
 
-import '../component/update_schedule.dart';
-
 class Profile extends StatefulWidget {
   const Profile({Key? key});
 
@@ -59,7 +57,6 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +151,10 @@ class _ProfileState extends State<Profile> {
                     radius: 45,
                     backgroundImage: profImg != null && profImg != ''
                         ? NetworkImage(profImg)
-                        : const NetworkImage(
-                            'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg',
-                          ),
+                        : Image.asset(
+                            'assets/images/profile_pic.png',
+                            fit: BoxFit.cover,
+                          ).image,
                   ),
                 ),
               ],
@@ -200,17 +198,6 @@ class _ProfileState extends State<Profile> {
                               );
                             },
                             icon: const Icon(Icons.person_2_outlined),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const UpdateSchedule(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.schedule),
                           ),
                           IconButton(
                             onPressed: () {

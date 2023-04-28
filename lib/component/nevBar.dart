@@ -14,6 +14,7 @@ class _nevBarState extends State<nevBar> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: CurvedNavigationBar(
             // key: _bottomNavigationKey,
