@@ -11,6 +11,7 @@ class EditScheduleScreen extends StatefulWidget {
 }
 
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
+  int LecCout=0;
   List<Map<String, String>> lectures = [];
   TextEditingController newLectureNameController = TextEditingController();
   TextEditingController newLectureTimeController = TextEditingController();
@@ -39,7 +40,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 })
             .toList();
 
-        setState(() {});
+        setState(() {
+          LecCout=lectures.length;
+        });
       }
     }
   }
