@@ -4,11 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../screen/edit_schedule_screen.dart';
 
-class TimeTableScreen extends StatelessWidget {
-  Future<bool> isAdminUser(String userEmail) async {
+class TimeTableScreen extends StatefulWidget {
+  @override
+  State<TimeTableScreen> createState() => _TimeTableScreenState();
+}
+
+class _TimeTableScreenState extends State<TimeTableScreen> {
+  
+
+  bool isAdmin =false;
+
+  Future<void> isAdminUser() async {
+    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
     try {
       if (userEmail == 'test@123.com') {
-        return true;
+        // return true;
       }
 
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -17,21 +27,30 @@ class TimeTableScreen extends StatelessWidget {
           .get();
 
       // Return true if the email exists in the collection
-      return querySnapshot.docs.isNotEmpty;
+      if(querySnapshot.docs.isNotEmpty){
+        setState(() {
+          isAdmin = true;
+        });
+      }
     } catch (error) {
       // Handle any errors that occur during the query
       print('Error checking admin user: $error');
-      return false;
     }
   }
 
+  @override
+  void initState() {
+    
+    super.initState();
+    isAdminUser();
+    
+  }
 // Implement onTap based on user's admin status
   void handleOnTap(BuildContext context) async {
-    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    
 
     // Check if the user is an admin
-    bool isAdmin = await isAdminUser(userEmail!);
-
+     
     if (isAdmin) {
       // Navigate to EditScheduleScreen if the user is an admin
       Navigator.push(
@@ -47,6 +66,8 @@ class TimeTableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // isAdminUser();
+      // print(isAdmin);
     return Expanded(
       child: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -70,8 +91,13 @@ class TimeTableScreen extends StatelessWidget {
           }
 
           final lectures = timetableData['lectures'] as List<dynamic>;
-          if (lectures.length == 0) {
+          if (lectures.length == 0 ) {
             // Handle any errors that occurred while fetching the data
+            if(isAdmin==false){
+              return Center(
+                child: Text("no Lecture's"),
+              );
+            }
             return Center(
               child: TextButton(
                   child: Text("add Lecture"),

@@ -1,14 +1,15 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guideconnect/component/Events.dart';
 import 'package:guideconnect/component/InspectButton.dart';
 import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/add_schedule_screen.dart';
 import 'package:guideconnect/screen/username_photo.dart';
-import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key});
@@ -74,7 +75,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     getData();
 
-    // print(showFloatingActionButton);
+    print(_Ison);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -182,6 +183,7 @@ class _ProfileState extends State<Profile> {
           ),
           const SizedBox(height: 10),
           if (_Ison == "Schedule") TimeTableScreen(),
+          if (_Ison == "Event") Eventscreen(),
         ]),
       ),
       floatingActionButton: showFloatingActionButton

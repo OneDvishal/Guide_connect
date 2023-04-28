@@ -1,14 +1,15 @@
-// ignore: duplicate_ignore
-// ignore: file_names
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-class Events extends StatelessWidget {
-  const Events({super.key});
+class Eventscreen extends StatefulWidget {
+  const Eventscreen({super.key});
 
+  @override
+  State<Eventscreen> createState() => _EventscreenState();
+}
+
+class _EventscreenState extends State<Eventscreen> {
   @override
   Widget build(BuildContext context) {
     return Text("Events is not build yet you mother f*cker",
