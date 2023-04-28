@@ -26,6 +26,7 @@ class _SignupPageState extends State<SignupPage> {
           .collection('user')
           .doc(future.user?.uid)
           .set({'username': username, 'Email': userEmail,'profileImageUrl':""});
+          // .set({'username': username, 'Email': userEmail, 'profileImageUrl' : ''});
 
       Navigator.pop(context);
     } on PlatformException catch (err) {
@@ -60,7 +61,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           height: MediaQuery.of(context).size.height - 50,
           width: double.infinity,
           child: Column(

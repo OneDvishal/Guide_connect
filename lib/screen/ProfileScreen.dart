@@ -1,41 +1,36 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guideconnect/component/InspectButton.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
 import 'package:guideconnect/screen/username_photo.dart';
 import 'package:intl/intl.dart';
 
+import '../component/update_schedule.dart';
+
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  const Profile({Key? key});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  // var _Inspectcolor=#ffffff;
   var _Ison = "Schedule";
-  // var _page=0;
+  String username = '';
+  var profImg;
+  String? userEmail;
 
-  // get icon => null;
   void _clicked(var str) {
     setState(() {
       _Ison = str;
     });
   }
 
-  String username = '';
-  String profImg = '';
-  
   Future getData() async {
-
     
     await FirebaseFirestore.instance
         .collection('user')
@@ -48,7 +43,7 @@ class _ProfileState extends State<Profile> {
           username = user['username'];
           profImg = user['profileImageUrl'];
         });
-        // print("geting ${profImg}");
+        
       }
     });
     // print(DocID);
@@ -63,13 +58,18 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     getData();
-    return MaterialApp(
-      home: Padding(
-        padding: const EdgeInsets.only(top: 13.0),
-        child: Scaffold(
-          appBar: AppBar(
+
+    bool showFloatingActionButton =
+        FirebaseAuth.instance.currentUser?.email == 'vishal@gmail.com';
+    // print(showFloatingActionButton);
+
+    return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
+            centerTitle: true,
             title: const Text(
               'Guide Connect',
               style: TextStyle(
@@ -81,7 +81,6 @@ class _ProfileState extends State<Profile> {
             ),
             actions: [
               DropdownButton(
-                elevation: 0,
                 dropdownColor: Theme.of(context).hoverColor,
                 icon: const Icon(Icons.more_vert),
                 onChanged: (itemidentifier) {
@@ -91,101 +90,139 @@ class _ProfileState extends State<Profile> {
                 },
                 items: [
                   DropdownMenuItem(
-                    value: 'Logout',
-                    child: Container(
-                      // color: Color.fromARGB(230, 3, 168, 244),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.exit_to_app),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                      value: 'Logout',
+                      child: Container(
+                        child: Row(
+                          children: const [
+                            Icon(Icons.exit_to_app),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'Logout',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ))
                 ],
               ),
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Hello,",
-                          style: GoogleFonts.poppins(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xff757084),
-                          ),
-                        ),
-                        Text(
-                          username != null ? username : "",
-                          style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff39304E),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      "Hello,",
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xff757084),
+                      ),
                     ),
-                    InkWell(
-                      // onTap: Navigator.push(context, route),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ProfilePhoto())),
-                      child: CircleAvatar(
-                        radius: 45,
-                        foregroundImage:
-                            profImg != null ? NetworkImage(profImg) : null,
-                        backgroundImage:
-                            AssetImage('assets/images/profile_pic.png'),
+                    Text(
+                      username != null ? username : "",
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff39304E),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      InspectButton("Schedule", _clicked, _Ison),
-                      InspectButton("Event", _clicked, _Ison),
-                      InspectButton("Assingment", _clicked, _Ison),
-                      // InspectButton("Event", _clicked, _Ison),
-                    ],
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfilePhoto(),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 45,
+                    backgroundImage: profImg != null && profImg != ''
+                        ? NetworkImage(profImg)
+                        : const NetworkImage(
+                            'https://i.pinimg.com/originals/17/66/56/1766569ede614813665828719d0872e6.jpg',
+                          ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                if (_Ison == "Schedule") TimeTableScreen(),
               ],
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            child: const Icon(Icons.add),
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 60,
-            child: nevBar(),
-          ),
+            const SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  InspectButton("Schedule", _clicked, _Ison),
+                  InspectButton("Event", _clicked, _Ison),
+                  InspectButton("Assingment", _clicked, _Ison),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            if (_Ison == "Schedule") TimeTableScreen(),
+          ]),
         ),
-      ),
-    );
+        floatingActionButton: showFloatingActionButton
+            ? FloatingActionButton(
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddAdmin(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.person_2_outlined),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const UpdateSchedule(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.schedule),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                // Handle the event icon onPressed event
+                              },
+                              icon: const Icon(Icons.event),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: const Icon(Icons.add),
+              )
+            : null,
+        bottomNavigationBar: SizedBox(
+          height: 60,
+          child: nevBar(),
+        ));
   }
 }
