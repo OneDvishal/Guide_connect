@@ -8,6 +8,7 @@ class createschedule extends StatefulWidget {
 }
 
 class _createscheduleState extends State<createschedule> {
+  var Leccount=1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +27,10 @@ class _createscheduleState extends State<createschedule> {
         ],
       ),
       body: ListView.builder(
-        itemCount: 1,
+        itemCount: Leccount,
         itemBuilder: (context, index) {
-          final lectureName = "lectures[index]['lecture'];";
-          final lectureTime = "lectures[index]['time']";
+          final lectureName = "";
+          final lectureTime = "";
 
           return ListTile(
             title: TextField(

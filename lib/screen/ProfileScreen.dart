@@ -34,12 +34,14 @@ class _ProfileState extends State<Profile> {
         .collection('Admin')
         .where('AdminMail', isEqualTo: Email)
         .get();
-        if(querySnapshot.docs.isNotEmpty){
-          setState(() {
-            showFloatingActionButton = true;
-          });
-        }
-        // return false;
+    if (querySnapshot.docs.isNotEmpty) {
+      setState(() {
+        showFloatingActionButton = true;
+      });
+    }
+    else{
+      showFloatingActionButton = false;
+    }
   }
 
   Future getData() async {
@@ -53,11 +55,11 @@ class _ProfileState extends State<Profile> {
         setState(() {
           username = user['username'];
           profImg = user['profileImageUrl'];
-          userEmail =user['Email'];
+          userEmail = user['Email'];
         });
       }
     });
-    
+
     isAdmin(userEmail);
     print(showFloatingActionButton);
   }
