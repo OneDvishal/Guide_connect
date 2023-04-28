@@ -44,6 +44,10 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   image_picker: ^0.8.7+4
   firebase_storage: ^11.1.1
+  liquid_swipe: ^3.0.0
+  #for swipe effect
+  smooth_page_indicator: ^1.0.0+2
+  #for bottom indicator
 
 dev_dependencies:
   flutter_test:
