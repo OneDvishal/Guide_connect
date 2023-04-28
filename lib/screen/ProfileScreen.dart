@@ -21,17 +21,25 @@ class _ProfileState extends State<Profile> {
   var _Ison = "Schedule";
   String username = '';
   var profImg;
-  String? userEmail;
-bool showFloatingActionButton=false;
+  String userEmail = '';
+  bool showFloatingActionButton = false;
   void _clicked(var str) {
     setState(() {
       _Ison = str;
     });
   }
 
-  Future isAdmin(String Email)async{
-    final QuerySnapshot querySnapshot =await FirebaseFirestore.instance.collection('Admin').where('AdminMail',isEqualTo: Email).get();
-    return QuerySnapshot;
+  Future<void> isAdmin(String Email) async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Admin')
+        .where('AdminMail', isEqualTo: Email)
+        .get();
+        if(querySnapshot.docs.isNotEmpty){
+          setState(() {
+            showFloatingActionButton = true;
+          });
+        }
+        // return false;
   }
 
   Future getData() async {
@@ -45,12 +53,13 @@ bool showFloatingActionButton=false;
         setState(() {
           username = user['username'];
           profImg = user['profileImageUrl'];
+          userEmail =user['Email'];
         });
       }
     });
-    // print(DocID);
-    showFloatingActionButton =
-        FirebaseAuth.instance.currentUser?.email == isAdmin(userEmail!);
+    
+    isAdmin(userEmail);
+    print(showFloatingActionButton);
   }
 
   @override
@@ -63,7 +72,6 @@ bool showFloatingActionButton=false;
   Widget build(BuildContext context) {
     getData();
 
-    
     // print(showFloatingActionButton);
 
     return Scaffold(
