@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class createschedule extends StatefulWidget {
   const createschedule({super.key});
-  
+
   String? get scheduleId => null;
 
   @override
@@ -11,7 +11,7 @@ class createschedule extends StatefulWidget {
 }
 
 class _createscheduleState extends State<createschedule> {
-  var Leccount=1;
+  int Leccount =0;
   List<Map<String, String>> lectures = [];
 
   void _saveSchedule() async {
@@ -24,13 +24,14 @@ class _createscheduleState extends State<createschedule> {
 
     await FirebaseFirestore.instance
         .collection('schedule')
-        .doc(widget.scheduleId)
+        .doc()
         .set({'lectures': updatedLectures});
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Schedule updated successfully')),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +41,13 @@ class _createscheduleState extends State<createschedule> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text('Edit Schedule', style: TextStyle(color: Colors.black),),
+        title: const Text(
+          'Add Schedule',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
-            onPressed: (){},
+            onPressed: () {},
             icon: const Icon(Icons.save),
           ),
         ],
@@ -75,6 +79,11 @@ class _createscheduleState extends State<createschedule> {
               ),
               controller: TextEditingController(text: lectureTime),
             ),
+            onTap: () {
+              setState(() {
+                
+              });
+            },
           );
         },
       ),

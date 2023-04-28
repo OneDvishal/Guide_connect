@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
     });
 
     isAdmin(userEmail);
-    print(showFloatingActionButton);
+    // print(showFloatingActionButton);
   }
 
   @override

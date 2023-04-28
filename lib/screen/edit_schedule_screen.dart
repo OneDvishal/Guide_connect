@@ -11,8 +11,8 @@ class EditScheduleScreen extends StatefulWidget {
 }
 
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
+  int LecCout=0;
   List<Map<String, String>> lectures = [];
-
   @override
   void initState() {
     super.initState();
@@ -37,7 +37,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 })
             .toList();
 
-        setState(() {});
+        setState(() {
+          LecCout=lectures.length;
+        });
       }
     }
   }
@@ -78,11 +80,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
         ],
       ),
       body: ListView.builder(
-        itemCount: lectures.length,
+        itemCount: LecCout,
         itemBuilder: (context, index) {
           final lectureName = lectures[index]['lecture'];
           final lectureTime = lectures[index]['time'];
-
           return ListTile(
             title: TextField(
               onChanged: (value) {

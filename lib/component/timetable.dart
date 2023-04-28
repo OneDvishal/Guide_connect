@@ -44,71 +44,7 @@ class TimeTableScreen extends StatelessWidget {
       );
     }
   }
-  // void createLectures() async {
-  //   // Create a Firestore instance
-  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  //   // Define the lectures for each day
-  //   final mondayLectures = [
-  //     {
-  //       "lecture": "English",
-  //       "time": "10:00 AM",
-  //     },
-  //     {
-  //       "lecture": "Math",
-  //       "time": "11:00 AM",
-  //     },
-  //     // Add more lectures for Monday if needed
-  //   ];
-
-  //   final tuesdayLectures = [
-  //     {
-  //       "lecture": "Science",
-  //       "time": "9:00 AM",
-  //     },
-  //     // Add more lectures for Tuesday if needed
-  //   ];
-
-  // final saturdayLectures = [
-  //   {
-  //     "lecture": null,
-  //     "time": null,
-  //   },
-  //   // Add more lectures for Wednesday if needed
-  // ];
-
-  //   final thursdayLectures = [
-  //     {
-  //       "lecture": "OS",
-  //       "time": "2:00 PM",
-  //     },
-  //     // Add more lectures for Thursday if needed
-  //   ];
-
-  //   // Create the lectures subcollection for each day
-  //   await firestore
-  //       .collection('schedule')
-  //       .doc('monday')
-  //       .set({'lectures': mondayLectures});
-
-  //   await firestore
-  //       .collection('schedule')
-  //       .doc('tuesday')
-  //       .set({'lectures': tuesdayLectures});
-
-  //   await firestore
-  //       .collection('schedule')
-  //       .doc('wednesday')
-  //       .set({'lectures': wednesdayLectures});
-
-  // await firestore
-  //     .collection('schedule')
-  //     .doc('saturday')
-  //     .set({'lectures': saturdayLectures});
-
-  //   print('Lectures created successfully!');
-  // }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Expanded(
