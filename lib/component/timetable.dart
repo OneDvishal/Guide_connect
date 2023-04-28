@@ -44,7 +44,7 @@ class TimeTableScreen extends StatelessWidget {
       );
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -62,8 +62,7 @@ class TimeTableScreen extends StatelessWidget {
           }
 
           final timetableData = snapshot.data?.data();
-          if (timetableData == null ||
-              timetableData is! Map<String, dynamic>) {
+          if (timetableData == null || timetableData is! Map<String, dynamic>) {
             // Handle the case when the data is null or not in the expected format
             return const Center(
               child: Text('No lectures available for today'),
@@ -71,7 +70,22 @@ class TimeTableScreen extends StatelessWidget {
           }
 
           final lectures = timetableData['lectures'] as List<dynamic>;
-          
+          if (lectures.length == 0) {
+            // Handle any errors that occurred while fetching the data
+            return Center(
+              child: TextButton(
+                  child: Text("add Lecture"),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditScheduleScreen(
+                              scheduleId:
+                                  _getDayOfWeek(DateTime.now().weekday)),
+                        ));
+                  }),
+            );
+          }
 
           return ListView.separated(
             itemCount: lectures.length,
@@ -114,8 +128,7 @@ class TimeTableScreen extends StatelessWidget {
                     ),
                   ),
                   leading: CircleAvatar(
-                    backgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(
