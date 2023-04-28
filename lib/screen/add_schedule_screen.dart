@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class createschedule extends StatefulWidget {
   const createschedule({super.key});
+  
+  String? get scheduleId => null;
 
   @override
   State<createschedule> createState() => _createscheduleState();
@@ -9,6 +12,25 @@ class createschedule extends StatefulWidget {
 
 class _createscheduleState extends State<createschedule> {
   var Leccount=1;
+  List<Map<String, String>> lectures = [];
+
+  void _saveSchedule() async {
+    final updatedLectures = lectures
+        .map((lecture) => {
+              'lecture': lecture['lecture'],
+              'time': lecture['time'],
+            })
+        .toList();
+
+    await FirebaseFirestore.instance
+        .collection('schedule')
+        .doc(widget.scheduleId)
+        .set({'lectures': updatedLectures});
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Schedule updated successfully')),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +57,7 @@ class _createscheduleState extends State<createschedule> {
           return ListTile(
             title: TextField(
               onChanged: (value) {
-                "lectures[index]['lecture'] = value";
+                lectures[index]['lecture'] = value;
               },
               decoration: const InputDecoration(
                 labelText: 'Lecture',
@@ -45,7 +67,7 @@ class _createscheduleState extends State<createschedule> {
             ),
             subtitle: TextField(
               onChanged: (value) {
-                "lectures[index]['time'] = value";
+                lectures[index]['time'] = value;
               },
               decoration: const InputDecoration(
                 labelText: 'Time',
