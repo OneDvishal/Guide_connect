@@ -31,10 +31,8 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
   Future<void> _uploadImageToFirebaseStorage() async {
     if (_imagePicker != null) {
       try {
-        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        final destination = 'images/$fileName';
-        final reference =
-            firebase_storage.FirebaseStorage.instance.ref(destination);
+        final reference = firebase_storage.FirebaseStorage.instance
+            .ref('images/${FirebaseAuth.instance.currentUser?.uid}');
         final uploadTask = reference.putFile(_imagePicker!);
 
         final snapshot = await uploadTask.whenComplete(() {});
@@ -50,11 +48,9 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {
             final userDoc =
-                FirebaseFirestore.instance.collection('user').doc(user.uid);
-
-            await userDoc.update({
-              'profileImageUrl': imageUrl,
-            });
+                FirebaseFirestore.instance.collection('user').doc(user.uid).update({
+                  'profileImageUrl':imageUrl
+                });
           }
         } else {
           print('Failed to upload image');
@@ -69,12 +65,14 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){
-          Navigator.pop(context);
-        }, icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        )),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            )),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),

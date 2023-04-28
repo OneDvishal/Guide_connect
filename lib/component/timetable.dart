@@ -5,27 +5,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../screen/edit_schedule_screen.dart';
 
 class TimeTableScreen extends StatelessWidget {
+  Future<bool> isAdminUser(String userEmail) async {
+    try {
+      if (userEmail == 'test@123.com') {
+        return true;
+      }
 
-Future<bool> isAdminUser(String userEmail) async {
-  try {
-    if (userEmail == 'test@123.com') {
-      return true;
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('admin_emails')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+      // Return true if the email exists in the collection
+      return querySnapshot.docs.isNotEmpty;
+    } catch (error) {
+      // Handle any errors that occur during the query
+      print('Error checking admin user: $error');
+      return false;
     }
-
-    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('admin_emails')
-        .where('email', isEqualTo: userEmail)
-        .get();
-
-    // Return true if the email exists in the collection
-    return querySnapshot.docs.isNotEmpty;
-  } catch (error) {
-    // Handle any errors that occur during the query
-    print('Error checking admin user: $error');
-    return false;
   }
-}
-
 
 // Implement onTap based on user's admin status
   void handleOnTap(BuildContext context) async {
@@ -113,9 +111,6 @@ Future<bool> isAdminUser(String userEmail) async {
 
   @override
   Widget build(BuildContext context) {
-    // Call the createLectures function to create the lectures in Firestore
-    // createLectures();
-
     return Expanded(
       child: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -123,13 +118,6 @@ Future<bool> isAdminUser(String userEmail) async {
             .doc(_getDayOfWeek(DateTime.now().weekday))
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Display a loading indicator while waiting for data
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
           if (snapshot.hasError) {
             // Handle any errors that occurred while fetching the data
             return const Center(
@@ -138,7 +126,8 @@ Future<bool> isAdminUser(String userEmail) async {
           }
 
           final timetableData = snapshot.data?.data();
-          if (timetableData == null || timetableData is! Map<String, dynamic>) {
+          if (timetableData == null ||
+              timetableData is! Map<String, dynamic>) {
             // Handle the case when the data is null or not in the expected format
             return const Center(
               child: Text('No lectures available for today'),
@@ -146,12 +135,7 @@ Future<bool> isAdminUser(String userEmail) async {
           }
 
           final lectures = timetableData['lectures'] as List<dynamic>;
-          // if (lectures == null || lectures.isEmpty) {
-          //   // Handle the case when there are no lectures for the current day
-          //   return const Center(
-          //     child: Text('No lectures available for today'),
-          //   );
-          // }
+          
 
           return ListView.separated(
             itemCount: lectures.length,
@@ -194,7 +178,8 @@ Future<bool> isAdminUser(String userEmail) async {
                     ),
                   ),
                   leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor:
+                        Theme.of(context).scaffoldBackgroundColor,
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(

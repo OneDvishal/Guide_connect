@@ -6,7 +6,9 @@ import 'package:guideconnect/component/InspectButton.dart';
 import 'package:guideconnect/component/add_admin.dart';
 import 'package:guideconnect/component/nevBar.dart';
 import 'package:guideconnect/component/timetable.dart';
+import 'package:guideconnect/screen/add_schedule_screen.dart';
 import 'package:guideconnect/screen/username_photo.dart';
+import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key});
@@ -19,49 +21,60 @@ class _ProfileState extends State<Profile> {
   var _Ison = "Schedule";
   String username = '';
   var profImg;
-  String? userEmail;
-
-  @override
-  void initState() {
-    getData();
-    super.initState();
-    getUserEmail();
-  }
-
-  Future<void> getData() async {
-    final userDoc = FirebaseFirestore.instance
-        .collection('user')
-        .doc(FirebaseAuth.instance.currentUser?.uid);
-
-    final userSnapshot = await userDoc.get();
-
-    if (userSnapshot.exists) {
-      setState(() {
-        username = userSnapshot.get('username');
-        profImg = userSnapshot.get('profileImageUrl');
-      });
-    }
-  }
-
+  String userEmail = '';
+  bool showFloatingActionButton = false;
   void _clicked(var str) {
     setState(() {
       _Ison = str;
     });
   }
 
-  Future<void> getUserEmail() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+  Future<void> isAdmin(String Email) async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Admin')
+        .where('AdminMail', isEqualTo: Email)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
       setState(() {
-        userEmail = user.email;
+        showFloatingActionButton = true;
       });
     }
+    else{
+      showFloatingActionButton = false;
+    }
+  }
+
+  Future getData() async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) async {
+      final user = value;
+      if (value.exists) {
+        setState(() {
+          username = user['username'];
+          profImg = user['profileImageUrl'];
+          userEmail = user['Email'];
+        });
+      }
+    });
+
+    isAdmin(userEmail);
+    print(showFloatingActionButton);
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool showFloatingActionButton =
-        FirebaseAuth.instance.currentUser?.email == 'test@123.com';
+    getData();
+
+    // print(showFloatingActionButton);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -90,22 +103,21 @@ class _ProfileState extends State<Profile> {
               },
               items: [
                 DropdownMenuItem(
-                  value: 'Logout',
-                  child: Container(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.exit_to_app),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                    value: 'Logout',
+                    child: Container(
+                      child: Row(
+                        children: const [
+                          Icon(Icons.exit_to_app),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ))
               ],
             ),
           ],
@@ -113,67 +125,64 @@ class _ProfileState extends State<Profile> {
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Hello,",
-                      style: GoogleFonts.poppins(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xff757084),
-                      ),
-                    ),
-                    Text(
-                      username != null ? username : "",
-                      style: GoogleFonts.poppins(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff39304E),
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfilePhoto(),
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 45,
-                    backgroundImage: profImg != null && profImg != ''
-                        ? NetworkImage(profImg)
-                        : Image.asset(
-                            'assets/images/profile_pic.png',
-                            fit: BoxFit.cover,
-                          ).image,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InspectButton("Schedule", _clicked, _Ison),
-                  InspectButton("Event", _clicked, _Ison),
-                  InspectButton("Notifications", _clicked, _Ison),
+                  Text(
+                    "Hello,",
+                    style: GoogleFonts.poppins(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xff757084),
+                    ),
+                  ),
+                  Text(
+                    username != null ? username : "",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff39304E),
+                    ),
+                  ),
                 ],
               ),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePhoto(),
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 45,
+                  backgroundImage: profImg != null && profImg != ''
+                      ? NetworkImage(profImg)
+                      : Image.asset(
+                          'assets/images/profile_pic.png',
+                          fit: BoxFit.cover,
+                        ).image,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                InspectButton("Schedule", _clicked, _Ison),
+                InspectButton("Event", _clicked, _Ison),
+                InspectButton("Notifications", _clicked, _Ison),
+              ],
             ),
-            const SizedBox(height: 10),
-            if (_Ison == "Schedule") TimeTableScreen(),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+          if (_Ison == "Schedule") TimeTableScreen(),
+        ]),
       ),
       floatingActionButton: showFloatingActionButton
           ? FloatingActionButton(
@@ -201,7 +210,11 @@ class _ProfileState extends State<Profile> {
                           ),
                           IconButton(
                             onPressed: () {
-                              // Handle the event icon onPressed event
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => createschedule(),
+                                  ));
                             },
                             icon: const Icon(Icons.event),
                           ),

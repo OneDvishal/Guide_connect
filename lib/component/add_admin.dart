@@ -10,11 +10,11 @@ class _AddAdminState extends State<AddAdmin> {
   final TextEditingController _emailController = TextEditingController();
 
   void _addAdminEmail() {
-    String email = _emailController.text.trim();
-
+    // _emailController.text.trim();
+    FocusScope.of(context).unfocus();
     // Add the email to Firebase Firestore
-    FirebaseFirestore.instance.collection('admin_emails').add({
-      'email': email,
+    FirebaseFirestore.instance.collection('admin_emails').doc().set({
+      'Email': _emailController.text.trim(),
     }).then((value) {
       // Email added successfully
       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,6 +82,9 @@ class _AddAdminState extends State<AddAdmin> {
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) {
+                setState(() {});
+              },
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(

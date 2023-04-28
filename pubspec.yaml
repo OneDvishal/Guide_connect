@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  intl: ^0.17.0
   flutter:
     sdk: flutter
 
@@ -44,10 +43,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   image_picker: ^0.8.7+4
   firebase_storage: ^11.1.1
-  liquid_swipe: ^3.0.0
-  #for swipe effect
-  smooth_page_indicator: ^1.0.0+2
-  #for bottom indicator
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
