@@ -12,6 +12,8 @@ class EditScheduleScreen extends StatefulWidget {
 
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
   List<Map<String, String>> lectures = [];
+  TextEditingController newLectureNameController = TextEditingController();
+  TextEditingController newLectureTimeController = TextEditingController();
 
   @override
   void initState() {
@@ -60,6 +62,21 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     );
   }
 
+  void _addNewSchedule() {
+    final newLectureName = newLectureNameController.text;
+    final newLectureTime = newLectureTimeController.text;
+
+    setState(() {
+      lectures.add({
+        'lecture': newLectureName,
+        'time': newLectureTime,
+      });
+
+      newLectureNameController.clear();
+      newLectureTimeController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +86,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text('Edit Schedule', style: TextStyle(color: Colors.black),),
+        title: const Text(
+          'Edit Schedule',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
             onPressed: _saveSchedule,
@@ -77,35 +97,72 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: lectures.length,
-        itemBuilder: (context, index) {
-          final lectureName = lectures[index]['lecture'];
-          final lectureTime = lectures[index]['time'];
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: lectures.length,
+              itemBuilder: (context, index) {
+                final lectureName = lectures[index]['lecture'];
+                final lectureTime = lectures[index]['time'];
 
-          return ListTile(
-            title: TextField(
-              onChanged: (value) {
-                lectures[index]['lecture'] = value;
+                return ListTile(
+                  title: TextField(
+                    onChanged: (value) {
+                      lectures[index]['lecture'] = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Lecture',
+                      hintText: 'Enter lecture name',
+                    ),
+                    controller: TextEditingController(text: lectureName),
+                  ),
+                  subtitle: TextField(
+                    onChanged: (value) {
+                      lectures[index]['time'] = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Time',
+                      hintText: 'Enter lecture time',
+                    ),
+                    controller: TextEditingController(text: lectureTime),
+                  ),
+                );
               },
-              decoration: const InputDecoration(
-                labelText: 'Lecture',
-                hintText: 'Enter lecture name',
-              ),
-              controller: TextEditingController(text: lectureName),
             ),
-            subtitle: TextField(
-              onChanged: (value) {
-                lectures[index]['time'] = value;
-              },
-              decoration: const InputDecoration(
-                labelText: 'Time',
-                hintText: 'Enter lecture time',
-              ),
-              controller: TextEditingController(text: lectureTime),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: newLectureNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'New Lecture',
+                      hintText: 'Enter lecture name',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    controller: newLectureTimeController,
+                    decoration: const InputDecoration(
+                      labelText: 'New Time',
+                      hintText: 'Enter lecture time',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: _addNewSchedule,
+                  child: const Text('Add Schedule'),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

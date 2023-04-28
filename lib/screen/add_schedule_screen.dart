@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class createschedule extends StatefulWidget {
-  const createschedule({super.key});
-  
+  const createschedule({Key? key});
+
   String? get scheduleId => null;
 
   @override
@@ -11,7 +11,7 @@ class createschedule extends StatefulWidget {
 }
 
 class _createscheduleState extends State<createschedule> {
-  var Leccount=1;
+  var Leccount = 1;
   List<Map<String, String>> lectures = [];
 
   void _saveSchedule() async {
@@ -31,6 +31,7 @@ class _createscheduleState extends State<createschedule> {
       const SnackBar(content: Text('Schedule updated successfully')),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +41,13 @@ class _createscheduleState extends State<createschedule> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text('Edit Schedule', style: TextStyle(color: Colors.black),),
+        title: const Text(
+          'Edit Schedule',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
-            onPressed: (){},
+            onPressed: () {},
             icon: const Icon(Icons.save),
           ),
         ],
@@ -65,15 +69,26 @@ class _createscheduleState extends State<createschedule> {
               ),
               controller: TextEditingController(text: lectureName),
             ),
-            subtitle: TextField(
-              onChanged: (value) {
-                lectures[index]['time'] = value;
-              },
-              decoration: const InputDecoration(
-                labelText: 'Time',
-                hintText: 'Enter lecture time',
-              ),
-              controller: TextEditingController(text: lectureTime),
+            subtitle: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    lectures[index]['time'] = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Time',
+                    hintText: 'Enter lecture time',
+                  ),
+                  controller: TextEditingController(text: lectureTime),
+                ),
+                const SizedBox(height: 30,),
+                ElevatedButton(
+                  onPressed: () {
+                    // Action for the button goes here
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
             ),
           );
         },
