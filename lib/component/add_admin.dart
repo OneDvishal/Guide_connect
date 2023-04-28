@@ -58,6 +58,7 @@ class _AddAdminState extends State<AddAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -107,76 +108,37 @@ class _AddAdminState extends State<AddAdmin> {
               ),
             ),
             const SizedBox(height: 16.0),
-            if (_emailController.text != "")
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('user')
-                      .where('Email',
-                          isGreaterThanOrEqualTo: _emailController.text)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final emails = snapshot.data!.docs;
-                      return ListView.builder(
-                        itemCount: emails.length,
-                        itemBuilder: (context, index) {
-                          final docId = emails[index].id;
-                          final email = emails[index]['Email'];
-                          return ListTile(
-                            title: Text(email),
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                _emailController.text=email;
-                                _addAdminEmail();
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    }
+            Expanded(
+  child: StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance
+        .collection('admin_emails')
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        final emails = snapshot.data!.docs;
 
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+        return ListView.builder(
+          itemCount: emails.length,
+          itemBuilder: (context, index) {
+            final docId = emails[index].id;
+final email = (emails[index].data() as Map<String, dynamic>?)?['email'] as String?;
+
+            return ListTile(
+              title: Text(email ?? ''),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.black),
+                onPressed: () => _removeAdminEmail(docId),
               ),
-            if (_emailController.text == "")
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('admin_emails')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final emails = snapshot.data!.docs;
-                      return ListView.builder(
-                        itemCount: emails.length,
-                        itemBuilder: (context, index) {
-                          final docId = emails[index].id;
-                          final email = emails[index]['Email'];
+            );
+          },
+        );
+      }
 
-                          return ListTile(
-                            title: Text(email),
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.black,
-                              ),
-                              onPressed: () => _removeAdminEmail(docId),
-                            ),
-                          );
-                        },
-                      );
-                    }
+      return const Center(child: CircularProgressIndicator());
+    },
+  ),
+),
 
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ),
           ],
         ),
       ),

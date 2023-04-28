@@ -14,6 +14,7 @@ class _nevBarState extends State<nevBar> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: CurvedNavigationBar(
             // key: _bottomNavigationKey,
@@ -34,12 +35,12 @@ class _nevBarState extends State<nevBar> {
               Icon(
                 Icons.perm_identity,
                 size: 30,
-                color: _page==3? Colors.white:Colors.black,
+                color: _page==2? Colors.white:Colors.black,
               ),
             ],
-            color: Colors.white,
-            buttonBackgroundColor: Colors.deepPurpleAccent,
-            backgroundColor: Colors.deepPurpleAccent,
+            color: Theme.of(context).scaffoldBackgroundColor,
+            buttonBackgroundColor: Colors.black,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             animationCurve: Curves.decelerate,
 
             animationDuration: const Duration(milliseconds: 600),
