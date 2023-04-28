@@ -31,7 +31,7 @@ bool showFloatingActionButton=false;
 
   Future isAdmin(String Email)async{
     final QuerySnapshot querySnapshot =await FirebaseFirestore.instance.collection('Admin').where('AdminMail',isEqualTo: Email).get();
-    return ;
+    return QuerySnapshot;
   }
 
   Future getData() async {
