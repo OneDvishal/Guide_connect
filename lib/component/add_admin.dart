@@ -58,7 +58,6 @@ class _AddAdminState extends State<AddAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -109,36 +108,36 @@ class _AddAdminState extends State<AddAdmin> {
             ),
             const SizedBox(height: 16.0),
             Expanded(
-  child: StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance
-        .collection('admin_emails')
-        .snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final emails = snapshot.data!.docs;
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('admin_emails')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final emails = snapshot.data!.docs;
 
-        return ListView.builder(
-          itemCount: emails.length,
-          itemBuilder: (context, index) {
-            final docId = emails[index].id;
-final email = (emails[index].data() as Map<String, dynamic>?)?['email'] as String?;
+                    return ListView.builder(
+                      itemCount: emails.length,
+                      itemBuilder: (context, index) {
+                        final docId = emails[index].id;
+                        final email = (emails[index].data()
+                            as Map<String, dynamic>?)?['email'] as String?;
 
-            return ListTile(
-              title: Text(email ?? ''),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.black),
-                onPressed: () => _removeAdminEmail(docId),
+                        return ListTile(
+                          title: Text(email ?? ''),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.black),
+                            onPressed: () => _removeAdminEmail(docId),
+                          ),
+                        );
+                      },
+                    );
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
-            );
-          },
-        );
-      }
-
-      return const Center(child: CircularProgressIndicator());
-    },
-  ),
-),
-
+            ),
           ],
         ),
       ),
